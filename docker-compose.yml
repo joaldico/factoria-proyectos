@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  factoria_backend:
+    image: docker.io/${DOCKER_USERNAME:-tu_usuario}/factoria-proyectos:backend-latest
+    container_name: factoria_padre_backend
+    restart: always
+    build: 
+      context: ./backend/src/Factoria.Proyectos.Api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+      - _ConexionBD=${DB_CONNECTION_STRING}
+      - _JwtKey=${JWT_SECRET_KEY}
+      - LogSettings__RutaLog=./Logs
+      - _AWSBucket=${AWS_BUCKET_NAME}
+      - _AWSAccessKey=${AWS_ACCESS_KEY}
+      - _AWSSecretKey=${AWS_SECRET_KEY}
+      - _AWSRegion=${AWS_REGION_CODE}
+      
+  factoria_frontend:
+    image: docker.io/${DOCKER_USERNAME:-tu_usuario}/factoria-proyectos:frontend-latest
+    container_name: factoria_padre_frontend
+    restart: always
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=http://79.148.143.130:8000 
+        - VITE_TAXIMETRO_URL=${TAXIMETRO_REMOTE_URL} 
+    ports:
+      - "3003:80"
+    depends_on:
+      - factoria_backend
