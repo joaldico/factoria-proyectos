@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       federation({
         name: 'factoria_host',
         remotes: {
-          taximetroApp: env.VITE_TAXIMETRO_REMOTE_URL || 'http://localhost:3002/assets/remoteEntry.js',
+          taximetroApp: env.VITE_TAXIMETRO_URL || 'http://localhost:3002/assets/remoteEntry.js',
         },
         shared: ['react', 'react-dom', 'react-router-dom', 'zustand', '@tanstack/react-query']
       })

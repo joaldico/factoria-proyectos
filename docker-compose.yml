@@ -29,7 +29,7 @@ services:
       context: ./frontend
       args:
         - VITE_API_URL=${VITE_API_URL}
-        - VITE_TAXIMETRO_URL=${VITE_TAXIMETRO_REMOTE_URL} 
+        - VITE_TAXIMETRO_URL=${VITE_TAXIMETRO_URL} 
     ports:
       - "3003:80"
     depends_on:
