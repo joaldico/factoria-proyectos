@@ -14,7 +14,7 @@ namespace Factoria.Proyectos.Api.Shared.Dto.Genericas
     {
         public int? rpt { get; set; }
         public string? mensaje { get; set; }
-        public string? data { get; set; }
+        public object? data { get; set; }
         public string? detalleError { get; set; }
     }
 }

@@ -30,21 +30,6 @@ namespace Factoria.Proyectos.Api.Infraestructura.Servicios
             throw new UnauthorizedAccessException("El token no contiene un ID de usuario válido.");
         }
 
-        public int ObtenerEmpresaIdDelToken()
-        {
-            var user = _httpContextAccessor.HttpContext?.User;
-
-            if (user == null)
-                throw new UnauthorizedAccessException("Usuario no autenticado en el contexto.");
-
-            var claimId = user.FindFirstValue("EmpresaId");
-            
-            if (int.TryParse(claimId, out int empresaId))
-                return empresaId;
-                
-            throw new UnauthorizedAccessException("El token no contiene un EmpresaId válido.");
-        }
-
         public string GenerarPasswordAleatorio(int longitud = 12)
         {
             const string caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
@@ -60,15 +45,13 @@ namespace Factoria.Proyectos.Api.Infraestructura.Servicios
             return sb.ToString();
         }
 
-
         public IActionResult ValidarModelo(ControllerBase controller)
         {
             if (!controller.ModelState.IsValid)
             {
                 var mensaje = string.Join("; ", controller.ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage));
-
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
 
                 return controller.BadRequest(new RespuestaSimpleBE
                 {

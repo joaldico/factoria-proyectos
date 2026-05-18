@@ -7,7 +7,6 @@ using Factoria.Proyectos.Api.Infraestructura.Servicios;
 
 namespace Factoria.Proyectos.Api.Controllers.General;
 
-[Authorize(Policy = "AccesoSeguroPodoestetik")]
 [ApiController]
 [Route("[controller]")]
 public class ArchivoController : ControllerBase
@@ -31,13 +30,13 @@ public class ArchivoController : ControllerBase
             if (string.IsNullOrEmpty(request.Base64))
                 return BadRequest(new RespuestaBE<string> { rpt = 1, mensaje = "El archivo Base64 está vacío", data = null });
 
-            int empresaId = _utils.ObtenerEmpresaIdDelToken();
+            int usuarioId = _utils.ObtenerUsuarioIdDelToken();
 
             string urlPublica = await _s3Helper.UploadBase64(
                 request.Base64, 
                 request.TipoArchivo, 
                 request.Folder, 
-                empresaId
+                usuarioId
             );
 
             return Ok(new RespuestaBE<string> { rpt = 0, mensaje = "Archivo subido correctamente", data = urlPublica });
@@ -53,7 +52,7 @@ public class ArchivoController : ControllerBase
             if (request.Archivos == null || !request.Archivos.Any())
                 return BadRequest(new RespuestaBE<List<string>> { rpt = 1, mensaje = "No se enviaron archivos", data = null });
 
-            int empresaId = _utils.ObtenerEmpresaIdDelToken();
+            int usuarioId = _utils.ObtenerUsuarioIdDelToken();
             var urlsSubidas = new List<string>();
 
             foreach (var archivo in request.Archivos)
@@ -62,7 +61,7 @@ public class ArchivoController : ControllerBase
                     archivo.Base64, 
                     archivo.TipoArchivo, 
                     archivo.Folder, 
-                    empresaId
+                    usuarioId
                 );
                 urlsSubidas.Add(url);
             }

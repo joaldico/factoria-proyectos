@@ -28,7 +28,7 @@ services:
     build:
       context: ./frontend
       args:
-        - VITE_API_URL=http://79.148.143.130:8000 
+        - VITE_API_URL=${VITE_API_URL}
         - VITE_TAXIMETRO_URL=${TAXIMETRO_REMOTE_URL} 
     ports:
       - "3003:80"

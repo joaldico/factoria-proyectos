@@ -19,41 +19,32 @@ namespace Factoria.Proyectos.Api.Infraestructura.Servicios
             _configuration = configuration;
         }
 
-
-        public string GenerarJwt(string usuarioId, string usuario, string IndicadorMfaValidado,
-            string IndicadorOlvidoContrasena = "0",
-            string IndicadorContrasenaExpirada = "0",
-            string IndicadorContrasenaTemporal = "0",
-            string EmpresaId = "0", 
-            string tenantAlias = "0")
+        public string GenerarJwt(string usuarioId, string codigoUsuario, string nombreCompleto)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, usuarioId),
-                new Claim(JwtRegisteredClaimNames.UniqueName, usuario),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("IndicadorMfaValidado", IndicadorMfaValidado),
-                new Claim("IndicadorOlvidoContrasena", IndicadorOlvidoContrasena),
-                new Claim("IndicadorContrasenaExpirada", IndicadorContrasenaExpirada),
-                new Claim("IndicadorContrasenaTemporal", IndicadorContrasenaTemporal),
-                new Claim("EmpresaId", EmpresaId),         
-                new Claim("TenantAlias", tenantAlias)     
+                new Claim(JwtRegisteredClaimNames.UniqueName, codigoUsuario),
+                new Claim("NombreCompleto", nombreCompleto),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["_JwtKey"]));
+            var keyString = _configuration["_JwtKey"];
+            if (string.IsNullOrEmpty(keyString)) throw new Exception("La llave JWT no está configurada.");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-            issuer: _settings.Issuer,
-            audience: _settings.Audience,
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_settings.ExpireMinutes),
-            signingCredentials: creds
+                issuer: _settings.Issuer,
+                audience: _settings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_settings.ExpireMinutes),
+                signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
 
         public string GenerarRefreshToken()
         {
