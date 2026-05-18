@@ -103,11 +103,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirFrontend", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:3003", 
-                "http://localhost:5173", 
-                "http://34.235.130.33"  
-              ) 
+        policy.AllowAnyOrigin() 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -124,11 +120,8 @@ var app = builder.Build();
 
 app.UseForwardedHeaders();
 
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("QA"))
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("PermitirFrontend");
 app.UseAuthentication();
