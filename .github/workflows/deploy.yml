@@ -56,7 +56,7 @@ jobs:
               -p 5073:8080 \
               -e ASPNETCORE_ENVIRONMENT=Production \
               -e _ConexionBD="${{ secrets.DB_CONNECTION_STRING }}" \
-              -e _JwtKey="${{ secrets.JWT_SECRET }}" \
+              -e _JwtKey="${{ secrets.JWT_SECRET_KEY }}" \
               -e LogSettings__RutaLog="./Logs" \
               -e _AWSBucket="${{ secrets.AWS_BUCKET_NAME }}" \
               -e _AWSAccessKey="${{ secrets.AWS_ACCESS_KEY }}" \
