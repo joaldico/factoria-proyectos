@@ -61,9 +61,9 @@ jobs:
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/factoria-backend:latest
             
-            # Correr Frontend (Host) en el puerto 3000 (Host) apuntando al 80 (Nginx)
+            # Correr Frontend (Host) en el puerto 3003 (Host) apuntando al 80 (Nginx)
             docker run -d --name factoria_padre_frontend \
-              -p 3000:80 \
+              -p 3003:80 \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/factoria-frontend:latest
           EOF
